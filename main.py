@@ -23,3 +23,8 @@ class Person(BaseModel):
 def home():
     return {"Hello": "World JOSE VILLARROEL"}
 
+# Request and response body
+
+@app.post("/person/new")
+def create_person(person: Person = Body(...)):
+    return person
