@@ -3,6 +3,7 @@ from typing import Optional
 
 #Pydantic
 from pydantic import BaseModel
+from pydantic import Field
 
 #FastAPI
 from fastapi import FastAPI
@@ -16,6 +17,7 @@ class Location(BaseModel):
     city: str
     state: str
     country: str
+
 class Person(BaseModel):
     first_name: str
     last_name: str
