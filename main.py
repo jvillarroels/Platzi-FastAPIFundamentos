@@ -21,28 +21,64 @@ class HairColor(Enum):
     blonde = "blonde"
     red = "red"
 class Location(BaseModel):
-    city: str
-    state: str
-    country: str
+    city: str = Field(
+        ...,
+        min_length=2,
+        max_length=100
+    )
+    state: str = Field(
+        ...,
+        min_length=2,
+        max_length=100
+    )
+    country: str = Field(
+        ...,
+        min_length=2,
+        max_length=100
+    )
+    class Config:
+        schema_extra = {
+            "example" : {
+                "city" : "San Francisco",
+                "state" : "California",
+                "country" : "USA"
+            }
+        }
 
 class Person(BaseModel):
     first_name: str = Field(
         ...,
         min_length=1,
-        max_length=50
+        max_length=50,
+        example="Miguel"
     )
     last_name: str = Field(
         ...,
         min_length=1,
-        max_length=50
+        max_length=50,
+        example="Torres"
     )
     age: int = Field(
         ...,
         gt=0,
-        le=115
+        le=115,
+        example=25
     )
-    hair_color: Optional[HairColor] = Field(default=None)
-    is_married: Optional[bool] = Field(default=None)
+    hair_color: Optional[HairColor] = Field(default=None, example="black")
+    is_married: Optional[bool] = Field(default=None, example=False)
+
+#class Config:
+#    schema_extra = {
+#        'example': {
+#            "first_name": "Facundo",
+#            "last_name": "García Martoni",
+#            "age": 21,
+#            "hair_color": "blonde",
+#            "is_married": False
+#        }
+#    }
+
+
 
 @app.get("/")
 def home():
@@ -91,9 +127,10 @@ def update_person (
         description="This is the person ID",
         gt=0
     ),
-    person: Person = Body(...),
-    location: Location = Body(...)
+    person: Person = Body(...)
+    #location: Location = Body(...)
 ):
-    results = person.model_dump()
-    results.update(location.model_dump())
-    return results
+    #results = person.model_dump()
+    #results.update(location.model_dump())
+    #return results
+    return person
