@@ -97,9 +97,16 @@ class LoginOut(BaseModel):
 
 @app.get(
     path="/", 
-    status_code=status.HTTP_200_OK
+    status_code=status.HTTP_200_OK, 
+    summary="Only for display the message Hello World"
     )
 def home():
+    """
+    Home
+
+    Returns:
+        The dictionary {"Hello": "World JOSE VILLARROEL Check-in SEGUNDO CURSO"}
+    """
     return {"Hello": "World JOSE VILLARROEL Check-in SEGUNDO CURSO"}
 
 # Request and response body
@@ -108,9 +115,22 @@ def home():
     path="/person/new", 
     response_model=PersonOut,
     status_code=status.HTTP_201_CREATED,
-    tags=["Persons"]
+    tags=["Persons"], 
+    summary="create Person in the app"
     )
 def create_person(person: Person = Body(...)):
+    """
+    Create Person
+
+    This path operation creates a person in the app and save the information in the database
+
+    Parameters:
+    - Request body parameter: 
+        - **person: Person** -> A person model with first name, last name, age, hair color and marital status
+    
+    Returns a person model with first name, last name, age, hair color and marital status
+    """
+
     return person
 
 # Validaciones: Query Parameters
@@ -136,6 +156,18 @@ def show_person(
         example=25
     )
 ):
+    """
+    Show Person
+
+    Show the person name and the age
+
+    Args:
+        name (Optional[str], optional): _description_. Defaults to Query( None, min_length=1, max_length=50, title="Person Name", description="This is the person name. It's between 1 and 50 characters", example="Rocio" ).
+        age (str, optional): _description_. Defaults to Query( ..., title="Person Age", description="This is the person age. It's required", example=25 ).
+
+    Returns:
+        _type_: _description_
+    """
     return {name: age}
 
 # Validaciones: Path Parameters
@@ -154,6 +186,20 @@ def show_person(
         example=123
         )
 ):
+    """
+    Show Person
+    
+    Show the informatión of a specific person
+
+    Args:
+        person_id (int, optional): _description_. Defaults to Path( ..., gt=0, example=123 ).
+
+    Raises:
+        HTTPException: _description_
+
+    Returns:
+        _type_: _description_
+    """
     if person_id not in persons:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
